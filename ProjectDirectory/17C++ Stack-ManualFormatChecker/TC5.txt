@@ -1,0 +1,261 @@
+const int INVENTORY_SIZE = 100;  // No more than 100 products
+
+struct Product {
+    string productName;       // product description
+    string locator;           // used to find product, may not be unique
+    int quantity;             // number of copies in inventory
+    double price;             // selling price of the product
+};
+
+void addProduct(Product[], int&);
+void removeProduct(Product[], int&);
+void adjustQuantity(Product[], int);
+void displayProduct(Product[], int);
+void displayInventory(Product[], int);
+int binarySearch (Product[], int, string); 
+void bubbleSort(Product[], int);
+
+
+int main () {
+    
+    Product inventory[INVENTORY_SIZE]; // inventory, contains the products
+    int size=0;                        // number of products in the inventory
+    int choice;                        // Menu choice
+    
+    cout << fixed << setprecision(2);
+    
+    do
+    {
+        cout << "\nManage Inventory Menu\n\n";
+        cout << "1. Add product\n";
+        cout << "2. Remove product\n";
+        cout << "3. Adjust quantity of a product\n";
+        cout << "4. Display a product\n";
+        cout << "5. Display inventory sorted by product name\n";
+        cout << "6. Quit the Program\n\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        
+        while (choice < 1 || choice > 6)
+        {
+            cout << "Please enter 1, 2, 3, 4, 5 or 6: ";
+            cin >> choice;
+        }
+        
+        // Respond to the user's menu selection.
+        switch (choice)
+        {
+            case 1:
+                // add a new product to the inventory
+                addProduct(inventory,size);
+                break;
+                
+            case 2:
+                // remove an product from the inventory
+                removeProduct(inventory,size);
+                break;
+                
+            case 3:
+                // adjust quantity of a product.
+                adjustQuantity(inventory,size);
+                break;
+
+            case 4:
+                // find a product in the inventory and display
+                displayProduct(inventory,size);
+                break;
+                
+            case 5:
+                // display the inventory, sorted by product name
+                displayInventory(inventory,size);
+                break;
+                
+            case 6:
+                // display a message before quitting
+                cout << "Exiting the program." << endl;
+                break;
+        }
+        
+    } while (choice != 6);
+    
+}
+
+void addProduct(Product array[], int &size) {
+    
+    if (size == INVENTORY_SIZE) {
+        cout << "Unable to add product, the inventory is full." << endl;
+        return;
+    }
+    
+    Product product;        // stores the info to be added
+    
+    // get the info from the user
+    cout << endl;
+    cout << "Enter the locator (no spaces): " << endl;
+    cin >> product.locator;
+    cout << "Enter the new product name: " << endl;
+    cin.ignore(100,'\n');        // to skip whitespace after the locator
+    getline(cin, product.productName);
+    do {
+       cout << "Enter the quantity (0 or more): " << endl;
+       cin >> product.quantity;
+    } while (product.quantity < 0);
+    do {
+      cout << "Enter the price (greater than 0) : " << endl;
+      cin >> product.price;
+    } while (product.price <= 0);
+    cout << endl;
+    
+    //Make sure it's unique
+    int index = binarySearch(array, size, product.productName);
+    if (index!=-1) {
+        cout << "Unable to add, the product name is not unique." << endl;
+        return;
+    }
+    
+    // put the product in the array at the next open spot, increment the size
+    array[size] = product;
+    size++;
+    
+    //sort:
+    bubbleSort(array,size);
+}
+
+void removeProduct(Product inventory[], int &size) {
+   string productName;           // product name of product to remove
+
+   // input product Name from user
+   cout << "Enter product name of product to remove: ";
+    cin.ignore(100,'\n');        // to skip whitespace after previous input
+    getline(cin, productName);
+ 
+   // find the product in the array
+   int index = binarySearch(inventory, size, productName);
+
+   // if found, remove it, else output message
+   if (index==-1) {
+      cout << "No product found with this product name. \n\n";
+   } else {
+      // shift all the elements after the index up by one, then change the size
+      for (int i=index; i < size-1; i++) {
+         inventory[i] = inventory[i+1];
+      }
+      size--;
+      cout << "Removed product with product name: " << productName
+           << endl << endl;
+   }
+}
+
+void adjustQuantity(Product inventory[], int size) {
+    string productName;          // product name of product to remove
+    
+    // input product Name from user
+    cout << "Enter product name of product to modify: ";
+    cin.ignore(100,'\n');        // to skip whitespace after previous input
+    getline(cin, productName);
+    
+    // find the product in the array
+    int index = binarySearch(inventory, size, productName);
+    
+    // if found, ask for change, else output message
+    if (index==-1) {
+        cout << "No product found with this product name. \n\n";
+    } else {
+        cout << "Enter desired change to quantity " 
+        << "(use negative value to decrease quantity)" << endl;
+        int change;
+        cin >> change;
+        int newValue = inventory[index].quantity + change;
+        if (newValue >= 0)
+            inventory[index].quantity = newValue;
+        else
+            cout << "The quantity cannot be set to a negative number" << endl;
+    }
+}
+
+
+void displayProduct(Product inventory[], int size) {
+   // get a productName from the user, to find it in the inventory
+   string productName;
+   cout << "Enter product name of product to find: ";
+    cin.ignore(100,'\n');        // to skip whitespace after previous input
+    getline(cin, productName);
+
+   // search the inventory for the product
+   int index = binarySearch(inventory, size, productName);
+   if (index==-1) {
+      // not found, display message
+      cout << endl;
+      cout << "No product found with this product name. \n\n";
+   } else {
+      // found, display the product
+      Product product = inventory[index];
+      cout << endl;
+      cout << "product name: " << product.productName << endl;
+       cout << "locator: " << product.locator << endl << endl;
+      cout << "quantity: " << product.quantity << endl;
+      cout << "price: " << product.price << endl;
+   }
+
+}
+
+
+void displayInventory(Product inventory[], int size) {
+   cout << endl;
+
+   for (int i=0; i<size; i++) {
+      cout << setw(10) << inventory[i].locator << " "
+           << setw(5) << inventory[i].quantity << " "
+           << setw(8) << inventory[i].price << " "
+           << inventory[i].productName << endl;
+   }
+}
+
+
+void bubbleSort(Product array[], int size)
+{
+   bool swap;       // flag, set when a swap occurs
+   Product temp;    // temporary variable, used to swap two products
+
+   do
+   {
+      swap = false;       // reset for each new pass through the inventory
+      for (int count = 0; count < (size - 1); count++)
+      {
+         // see if name of current product is greater than the next
+         if (array[count].productName > array[count + 1].productName)
+         {
+            // if so, swap
+            temp = array[count];
+            array[count] = array[count + 1];
+            array[count + 1] = temp;
+            swap = true;
+         }
+      }
+   } while (swap);
+}
+
+
+int binarySearch(Product array[], int size, string value)
+{
+    int first = 0,         // First array element
+    last = size - 1,       // Last array element
+    middle,                // Mid point of search
+    position = -1;         // Position of search value
+    bool found = false;    // Flag
+    
+    while (!found && first <= last)
+    {
+        middle = (first + last) / 2;     // Calculate mid point
+        if (array[middle].productName == value)     // If value is found at mid
+        {
+            found = true;
+            position = middle;
+        }
+        else if (value < array[middle].productName) //If value is in lower half
+            last = middle - 1;
+        else
+            first = middle + 1;           // If value is in upper half
+    }
+    return position;
+}

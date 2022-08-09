@@ -1,0 +1,4 @@
+Name      House        Average
+Harry     Gryffindor   70.0
+Draco     Slytherin    95.0
+Luna      Ravenclaw    63.3

@@ -1,0 +1,29 @@
+0 / 5
+Test feedback
+Number of movies is 0instead of 6
+Movie '1 Pulp Fiction 1994/10/14 8.9' is read incorrectly. Got '0   0' instead
+Movie '2 The Godfather 1972/04/24 9.2' is read incorrectly. Got '0   0' instead
+Movie '3 The Dark Knight 2008/07/18 9' is read incorrectly. Got '0   0' instead
+Movie '4 The Godfather: Part II 1974/12/18 9' is read incorrectly. Got '0   0' instead
+Movie '6 The Shawshank Redemption 1994/10/14 9.3' is read incorrectly. Got '0   0' instead
+Movie '7 Schindler's List 1994/02/04 8.9' is read incorrectly. Got '0   0
+
+
+
+// Code here that is currently working correctly
+
+void readMovies(ifstream& in, Movie movies[], int& size) {
+
+    int num = 0;
+    in.open("movies.txt");
+    while (in >> movies[num].id) {
+        in >> ws;
+        getline(in , movies[num].name);
+        getline(in , movies[num].releaseDate);
+        in >> movies[num].rating;
+        in >> ws;
+        num++;
+    }
+    size = num;
+    in.close();
+}
