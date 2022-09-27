@@ -1,10 +1,5 @@
 // File Name: MovieList.h
-//
-// Author: Vladyslav Prokopenko, Jill Seaman
-// Date: 10/26/2020
-// Assignment Number: 5
-// CS 2308/CS 5301 Spring 2021
-// Instructor: Jill Seaman
+
 
 #include <string>
 #include <iostream>
