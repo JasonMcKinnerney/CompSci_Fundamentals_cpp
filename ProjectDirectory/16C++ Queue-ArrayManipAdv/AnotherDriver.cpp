@@ -1,11 +1,6 @@
 // File Name: TestDriver.cpp
 //
-// Author: Jill Seaman
-// Date: 4/13/2021
-// Assignment Number: 5
-// CS 2308/CS 5301 Spring 2021
-// Instructor: Jill Seaman
-//
+// Author: Jason McKinnerney
 // A new test driver for a MovieList.
 //
 
