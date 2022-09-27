@@ -1,6 +1,6 @@
 // File Name: UnitTests.cpp
 //
-// Author: Vladyslav Prokopenko
+// Author: Jason McKinnerney
 // Date: 10/26/2020
 // Assignment Number: 5
 // CS 2308/CS 5301 Spring 2021
